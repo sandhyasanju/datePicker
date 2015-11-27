@@ -1,0 +1,9 @@
+span {
+  margin: 5px;
+}
+table thead th {
+  cursor: pointer;
+}
+.p {
+  display: inline;
+}
