@@ -3,6 +3,13 @@ span {
 }
 table thead th {
   cursor: pointer;
+  background: #C0C0C0;
+}
+.weeks {
+  background: #6699FF;
+}
+table tbody td {
+  cursor: pointer;
 }
 .p {
   display: inline;
