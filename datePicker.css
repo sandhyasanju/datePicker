@@ -14,3 +14,14 @@ table tbody td {
 .p {
   display: inline;
 }
+.col_color {
+  background: blue;
+  color: white;
+}
+.selected_cell {
+  background: yellow;
+  color: blue;
+}
+table {
+  display: none;
+}

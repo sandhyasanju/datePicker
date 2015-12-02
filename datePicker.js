@@ -27,7 +27,7 @@ $(document).ready(function() {
     thead.append(th4);
     table.append(thead);
     table.append(thead1);
-    var table1 = $('<table class = "table table--bordered"></table>');
+    var table1 = $('<table class = "table table--bordered" id = "dates"></table>');
     $("#calender").append(table);
     $("#calender").append(table1);
     monthDays();
@@ -37,28 +37,33 @@ $(document).ready(function() {
     var currentMonth = $(".month").html();
     var month = months.indexOf(currentMonth);
     var year = $(".year").html();
-    leapYear();
     var firstDay = new Date(year , month , 1);
     var startDay = firstDay.getDay();
     var week = days[startDay];
     var day = days.indexOf(week);
     var temp = months.indexOf(month);
+    leapYear();
     //printing days of the month
     var date = 1;
+    var table = $("#dates");
     var tbody = $('<tbody></tbody>');
     var d = 0;
     var noOfRows = Math.ceil(daysInMonth[month]/7);
-    if(startDay >= 5 && daysInMonth[month] > 30)
+    if( ( startDay >= 5 && daysInMonth[month] > 30 ) || ( startDay >= 6 && daysInMonth[month] > 29 ) || ( startDay >= 1 && daysInMonth[month] === 28 ) )
     noOfRows = noOfRows+1;
     for( rows = 0 ; rows < noOfRows ; rows++ ) {
       var tr = $('<tr></tr>');
       for( var col = 0 ; col < 7 ; col++ ) {
-        var td = $('<td></td>');
+        var td = $('<td onclick = "selectDate()"></td>');
         if( d < startDay ) {
           td.html("");
           d++;
         }
         else {
+          var currentFullDate = new Date();
+          var currentDate = currentFullDate.getDate();
+          if(date === currentDate)
+          td.addClass("col_color");
           td.html(date);
           date++;
           if( date > daysInMonth[month]+1)
@@ -66,9 +71,22 @@ $(document).ready(function() {
         }
         tr.append(td);
         tbody.append(tr);
-        $(".table--bordered").html(tbody);
+        table.html(tbody);
+        table.addClass("calendar");
+        if($("input").select()) {
+          /*for(var row = 0 ; row < noOfRows ; row++ ) {
+            for( var cols = 0 ; cols < 7 ; cols++ ) {
+              var dat = $('.calendar tr:eq('+row+') td:eq('+cols+')').text();
+              window.alert(dat);
+              $('tr:eq('+rows+') td:eq('+col+')').addClass("selected_cell");
+            }
+          }
+          //$('.calendar tr:eq('+rows+') td:eq('+col+')').css('background-color','green');*/
+        $("table").show();
       }
     }
+  }
+    //$(".table--bordered tr:eq(rows) td:eq(col)").click(selectDate());
   };
   //function to find out the leap year
   leapYear = function() {
@@ -80,7 +98,7 @@ $(document).ready(function() {
         daysInMonth[1] = 29;
       }
       else {
-        daysInMonth[temp] = daysInMonth[temp];
+        daysInMonth[1] = 28;
       }
     }
   };
@@ -122,8 +140,19 @@ $(document).ready(function() {
   };
   //function to select the date into input box
   selectDate = function() {
-    $(".table--bordered tr td").click(function() {
-      $("input").val($(".table--bordered tr td").html());
-    });
+    var date = new Date();
+    var day = date.getDate();
+    var week = date.getDay();
+    var weeks = ["Sunday" , "Monday" , "Tuesday" , "Wednesday" , "Thursday" , "Friday" , "Saturday"];
+    var week1 = weeks[week];
+    var month = $(".month").html();
+    var year = $(".year").html();
+    var temp = months.indexOf(month)+1;
+    var selectedDate = new Date( year,temp-1,day);
+    var selectedDay = selectedDate.getDate();
+    var selectedWeek = weeks[selectedDate.getDay()];
+    $("input").val(function() {
+      return selectedDay + "/" + temp + "/" + year + "(" + selectedWeek + ")";
+    });  $("table").hide();
   };
 });
