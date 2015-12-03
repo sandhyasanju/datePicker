@@ -22,6 +22,6 @@ table tbody td {
   background: yellow;
   color: blue;
 }
-table {
-  display: none;
+.noDate {
+  background: grey;
 }
